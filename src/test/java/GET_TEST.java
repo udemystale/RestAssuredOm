@@ -4,6 +4,8 @@ import static org.hamcrest.Matchers.*;
 
 import org.testng.annotations.Test;
 
+import io.restassured.response.Response;
+
 public class GET_TEST {
 	public static String BASE_URL = "https://api.postman.com";
 	public static String WORKSPACE = "/workspaces";
@@ -31,21 +33,42 @@ public class GET_TEST {
 
 				then().log().all().assertThat().statusCode(RESP_200);
 	}
-	
-	
+
 	@org.testng.annotations.Test
 	void validate_responce_body() {
-		given().baseUri(BASE_URL).header("X-API-Key", "PMAK" + apiKey_1 + apiKey_2).	when().get(WORKSPACE).
-		then().log().all().assertThat().statusCode(RESP_200).
-		
-		//using groovy's gpatch
-		
-		//here single body with two assertions
-		body("workspaces.name",hasItems("Team Workspace", "My Workspace", "w1", "Test Post workspace"),
-			"workspaces.name[1]",is(equalTo("My Workspace"))).
-		//different body
-		body("workspaces.id", hasItem("fe759805-408a-4946-8a40-8dbbca2e3236"));
-		
+		given().baseUri(BASE_URL).header("X-API-Key", "PMAK" + apiKey_1 + apiKey_2).when().get(WORKSPACE).then().log()
+				.all().assertThat().statusCode(RESP_200).
+
+				// using groovy's gpatch
+
+				// here single body with two assertions
+				body("workspaces.name", hasItems("Team Workspace", "My Workspace", "w1", "Test Post workspace"),
+						"workspaces.name[1]", is(equalTo("My Workspace")))
+				.
+				// different body
+				body("workspaces.id", hasItem("fe759805-408a-4946-8a40-8dbbca2e3236"));
+
 	}
 
+	@org.testng.annotations.Test
+	void extract_responce() {
+
+		// Response is an abstract class we are assigning the value to it
+		Response res;
+
+		res = given().baseUri(BASE_URL).header("X-API-Key", "PMAK" + apiKey_1 + apiKey_2).when().get(WORKSPACE).then()
+				.assertThat().statusCode(RESP_200).extract().response();
+
+		// to print response we as using asString not toStriong
+
+		/*
+		 * Note --> Heders is not printed here but it's part of response
+		 * 
+		 */
+		System.out.println("Response -->" + res.asString());
+		
+		//for pretty string like josn formater
+		System.out.println("Response -->" + res.asPrettyString());
+
+	}
 }
