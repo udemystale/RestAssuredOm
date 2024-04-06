@@ -1,9 +1,11 @@
 import static io.restassured.RestAssured.*;
 import static io.restassured.matcher.RestAssuredMatchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 import java.util.ArrayList;
 
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import io.restassured.path.json.JsonPath;
@@ -77,62 +79,70 @@ public class GET_TEST {
 
 	@Test
 	void single_vlaue_from_response() {
-		
+
 		System.out.println("First ways");
-		Response res =
-		given().baseUri(BASE_URL).header("X-API-Key", "PMAK" + apiKey_1 + apiKey_2).when().get(WORKSPACE).then()
-		.assertThat().statusCode(RESP_200).extract().response();
-		
-		
-		//rest ausurred by default uese groovey 
-		System.out.println("Workspace name -->"+res.path("workspaces[0].name"));
-		System.out.println("===============================================================================================");
-		
+		Response res = given().baseUri(BASE_URL).header("X-API-Key", "PMAK" + apiKey_1 + apiKey_2).when().get(WORKSPACE)
+				.then().assertThat().statusCode(RESP_200).extract().response();
+
+		// rest ausurred by default uese groovey
+		System.out.println("Workspace name -->" + res.path("workspaces[0].name"));
+		System.out.println(
+				"===============================================================================================");
+
 		System.out.println("Second way ways");
-		Response res1 =
-		given().baseUri(BASE_URL).header("X-API-Key", "PMAK" + apiKey_1 + apiKey_2).when().get(WORKSPACE).then()
-		.assertThat().statusCode(RESP_200).extract().response();
-		
-		//asString should be used
+		Response res1 = given().baseUri(BASE_URL).header("X-API-Key", "PMAK" + apiKey_1 + apiKey_2).when()
+				.get(WORKSPACE).then().assertThat().statusCode(RESP_200).extract().response();
+
+		// asString should be used
 		JsonPath jpath = new JsonPath(res1.asString());
-		//base on return type of the value we need to use the method
-		System.out.println("WorkSpace name -->"+ jpath.getString("workspaces[0].name"));
-		//ex for Array
-		System.out.println("WorkSpace name -->"+ jpath.getList("workspaces.name"));
-		
-		
-		
-		
-System.out.println("===============================================================================================");
-		
+		// base on return type of the value we need to use the method
+		System.out.println("WorkSpace name -->" + jpath.getString("workspaces[0].name"));
+		// ex for Array
+		System.out.println("WorkSpace name -->" + jpath.getList("workspaces.name"));
+
+		System.out.println(
+				"===============================================================================================");
+
 		System.out.println("Third way ways");
-		
-		Response res2 =
-				given().baseUri(BASE_URL).header("X-API-Key", "PMAK" + apiKey_1 + apiKey_2).when().get(WORKSPACE).then()
-				.assertThat().statusCode(RESP_200).extract().response();
-		String ss =JsonPath.from(res2.asString()).getString("workspaces[0].name");
-		
-	ArrayList al=	(ArrayList) JsonPath.from(res2.asString()).getList("workspaces.name");
+
+		Response res2 = given().baseUri(BASE_URL).header("X-API-Key", "PMAK" + apiKey_1 + apiKey_2).when()
+				.get(WORKSPACE).then().assertThat().statusCode(RESP_200).extract().response();
+		String ss = JsonPath.from(res2.asString()).getString("workspaces[0].name");
+
+		ArrayList al = (ArrayList) JsonPath.from(res2.asString()).getList("workspaces.name");
 		System.out.println(ss);
 		System.out.println(al);
-		
+
 		/*
 		 * Same can be done like
-		 * */
-		String res3 = given().baseUri(BASE_URL).header("X-API-Key", "PMAK" + apiKey_1 + apiKey_2).when().get(WORKSPACE).then()
-				.assertThat().statusCode(RESP_200).extract().response().asString();
-		
+		 */
+		String res3 = given().baseUri(BASE_URL).header("X-API-Key", "PMAK" + apiKey_1 + apiKey_2).when().get(WORKSPACE)
+				.then().assertThat().statusCode(RESP_200).extract().response().asString();
+
 		System.out.println(JsonPath.from(res3).getString("workspaces[0].name"));
-		
-		
-System.out.println("===============================================================================================");
-		
+
+		System.out.println(
+				"===============================================================================================");
+
 		System.out.println("Fourth way ways");
-		
-		//using path() method
-		
-		String res4 = given().baseUri(BASE_URL).header("X-API-Key", "PMAK" + apiKey_1 + apiKey_2).when().get(WORKSPACE).then()
-				.assertThat().statusCode(RESP_200).extract().response().path("workspaces[0].name");
+
+		// using path() method
+
+		String res4 = given().baseUri(BASE_URL).header("X-API-Key", "PMAK" + apiKey_1 + apiKey_2).when().get(WORKSPACE)
+				.then().assertThat().statusCode(RESP_200).extract().response().path("workspaces[0].name");
 		System.out.println(res4);
+	}
+
+	
+	@Test
+	void hamcrest_assert_on_extracted_response() {
+		String name = given().baseUri(BASE_URL).header("X-API-Key", "PMAK" + apiKey_1 + apiKey_2).when().get(WORKSPACE)
+				.then().assertThat().statusCode(RESP_200).extract().response().path("workspaces[0].name");
+
+		// for this u need to import -->import static org.hamcrest.MatcherAssert.assertThat;
+		assertThat(name, equalTo("Team Workspace"));
+		
+		Assert.assertEquals(name, "Team Workspace");
+
 	}
 }
