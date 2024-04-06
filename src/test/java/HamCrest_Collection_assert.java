@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -55,6 +56,38 @@ public class HamCrest_Collection_assert {
 				// Check if every item in a collection starts with specified string
 				// in below case we are check evveryItem is not start with my
 				.body("workspaces.name", is(not(everyItem(startsWith("my")))));
+
+	}
+	
+	@Test
+	void map_method() {
+
+		given().baseUri(BASE_URL).header("X-API-Key", "PMAK" + apiKey_1 + apiKey_2).when().get(WORKSPACE).then()
+				.assertThat().statusCode(RESP_200).
+				
+				//here we need map so we need to use "workspaces[0]"
+				// need to check key then use method hasKey()
+				body("workspaces[0]", hasKey("name")).
+				// need to check value then needs to use hasValue()
+				body("workspaces[0]", hasValue("Team Workspace")).
+				
+				//need to check key -value pair then use hasEntry
+				body("workspaces[0]", hasEntry("name","Team Workspace"))
+				
+				
+				//check collection is Empty or not use equalTo(Collections.EMPTY_MAP)
+				.body("workspaces[0]",not(equalTo(Collections.EMPTY_MAP))).
+				
+				
+				
+				// These below are used only for string purpose
+				//allOf() -> Matches if all matchers matches
+				//anyOf() -> Matches if any of the matchers matches
+				body("workspaces.name[3]",allOf(startsWith("Test Post"),containsString("workspace")))
+				.body("workspaces.name[3]",anyOf(startsWith("Test Post"),containsString("workspace")))
+				;
+				
+				
 
 	}
 
