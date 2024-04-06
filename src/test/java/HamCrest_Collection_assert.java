@@ -17,7 +17,7 @@ public class HamCrest_Collection_assert {
 	static int RESP_200 = 200;
 	static String apiKey_1 = "-65e5ed1b2cbf790001869f42-";
 	static String apiKey_2 = "dfea8a7457bed05a72d9d335de0797c27a";
-	static Response res;
+	static String res;
 
 	@Test
 	void collections_assert() {
@@ -35,6 +35,27 @@ public class HamCrest_Collection_assert {
 				// order
 				.body("workspaces.name",
 						containsInAnyOrder("My Workspace", "w1", "Test Post workspace", "Team Workspace"));
+	}
+
+	@Test
+	void empty_method() {
+
+		given().baseUri(BASE_URL).header("X-API-Key", "PMAK" + apiKey_1 + apiKey_2).when().get(WORKSPACE).then()
+				.assertThat().statusCode(RESP_200).
+				// is not empty to check collectio0n is not empty
+
+				body("workspaces.name", is(not(empty())))
+
+				// Check if the Array is not empty
+				.body("workspaces.name", is(not(emptyArray()))).
+
+				// Check size of a collection
+				body("workspaces.name", hasSize(4))
+
+				// Check if every item in a collection starts with specified string
+				// in below case we are check evveryItem is not start with my
+				.body("workspaces.name", is(not(everyItem(startsWith("my")))));
+
 	}
 
 }
