@@ -3,6 +3,8 @@ import static io.restassured.matcher.RestAssuredMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
+import java.util.HashMap;
+
 import org.testng.annotations.Test;
 
 import io.restassured.http.Header;
@@ -47,7 +49,7 @@ public class HeaderTesting {
 	}
 	
 	@Test
-	void multiple_header_suing_headers() {
+	void multiple_header_using_headers() {
 		
 		//by creating headers object here is HEADERS OBJECT
 		
@@ -66,6 +68,34 @@ public class HeaderTesting {
 		System.out.println("=============================================================================");
 		
 		given().baseUri("https://8bcde19e-bb18-4b95-a5bc-57a2b05ae0ab.mock.pstmn.io").headers(headres2)
+		.when().get("headTest")
+
+		.then().log().all().assertThat().statusCode(200);
+	}
+	
+	@Test
+	void multiple_header_using_mapCollection() {
+		
+		//by creating headers object here is HashMap
+		HashMap<String, String> HeadersM1 = new HashMap<String, String>();
+		HeadersM1.put("header", "value1");
+		HeadersM1.put("x-mock-match-request-headers", "header");
+		
+		HashMap<String, String> HeadersM2 = new HashMap<String, String>();
+		HeadersM1.put("header", "value2");
+		HeadersM1.put("x-mock-match-request-headers", "header");
+		
+		
+		
+		
+		given().baseUri("https://8bcde19e-bb18-4b95-a5bc-57a2b05ae0ab.mock.pstmn.io").headers(HeadersM1)
+				.when().get("headTest")
+
+				.then().log().all().assertThat().statusCode(200);
+		
+		System.out.println("=============================================================================");
+		
+		given().baseUri("https://8bcde19e-bb18-4b95-a5bc-57a2b05ae0ab.mock.pstmn.io").headers(HeadersM2)
 		.when().get("headTest")
 
 		.then().log().all().assertThat().statusCode(200);
