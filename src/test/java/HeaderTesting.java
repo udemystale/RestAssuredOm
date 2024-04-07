@@ -100,4 +100,29 @@ public class HeaderTesting {
 
 		.then().log().all().assertThat().statusCode(200);
 	}
+	
+	//headTest/multiValueHeader
+	
+	@Test
+	void multi_value_Headers() {
+	//there two ways to to do this
+		
+		given().baseUri("https://8bcde19e-bb18-4b95-a5bc-57a2b05ae0ab.mock.pstmn.io").header("multiValueHeader","value1","value2")
+				.log().headers().
+				when().get("headTest/multiValueHeader")
+
+				.then().log().headers().assertThat().statusCode(200);
+		
+		System.out.println("=============================================================================");
+		Header header1 = new Header("multiValueHeader", "value1");
+		Header header2 = new Header("multiValueHeader", "value2");
+		
+		Headers headres1 = new Headers(header1,header2);
+		
+		
+		given().baseUri("https://8bcde19e-bb18-4b95-a5bc-57a2b05ae0ab.mock.pstmn.io").headers(headres1)
+		.log().headers().when().get("headTest/multiValueHeader")
+
+		.then().log().all().assertThat().statusCode(200);
+	}
 }
