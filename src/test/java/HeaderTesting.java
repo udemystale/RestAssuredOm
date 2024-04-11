@@ -175,6 +175,8 @@ public class HeaderTesting {
 				.header("multiValueHeader", "value1", "value2").log().headers().when().get("headTest/multiValueHeader")
 
 				.then().log().headers().assertThat().statusCode(200).extract().headers();
+		
+		//Set all the values to list of string using getValues
 		List<String> values = extractedHeader.getValues("MultiValue");
 
 		int temp = 1;
