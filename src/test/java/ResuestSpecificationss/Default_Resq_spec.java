@@ -13,7 +13,9 @@ import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.response.Response;
+import io.restassured.specification.QueryableRequestSpecification;
 import io.restassured.specification.RequestSpecification;
+import io.restassured.specification.SpecificationQuerier;
 import jdk.internal.net.http.common.Log;
 
 public class Default_Resq_spec {
@@ -72,6 +74,26 @@ public class Default_Resq_spec {
 		assertThat(response.path("workspaces.name[1]").toString(), is(equalTo("My Workspace")));
 		// assertThat(response.path("workspaces.name").toString(), hasItems("Team
 		// Workspace", "My Workspace", "w1", "Test Post workspace"));
+
+	}
+	
+	
+	@Test
+	
+	//Incase u need to query the requset for baseUrl or header like that
+	void query_request_sepcification() {
+
+		// here given().spec(requestSpecification). is removed as defautl reqSpec is set
+				// via using RestAssured class level varaible
+		
+		QueryableRequestSpecification queryableReqSepc = SpecificationQuerier.query(requestSpecification);
+		System.out.println("  --------------Query specification-------------------");
+		System.out.println(queryableReqSepc.getBaseUri());
+		System.out.println(queryableReqSepc.getHeaders());
+		System.out.println("  --------------Query specification  close-------------------");
+		Response response = get(WORKSPACE);
+
+		assertThat(response.statusCode(), is(equalTo(RESP_200)));
 
 	}
 
