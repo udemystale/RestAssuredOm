@@ -70,7 +70,9 @@ public class A_Automate_post {
 		
 		.when().post(WORKSPACE)
 		
-		.then().assertThat()
+		.then().log().all()
+		
+		.assertThat()
 		
 		.body("workspace.name", equalTo("My First worksspace1"),
 				
