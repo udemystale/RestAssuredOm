@@ -44,7 +44,7 @@ public class B_Automate_PUT_req {
 	//First way to patch with header
 	void validate_patch_bdd_style_1()
 	{
-		String workspaceId ="801653a4-0731-4832-af4d-6095ab25e8bd";
+		String workspaceId ="018e21c0-093a-4ff0-9406-c098dc72a40a";
 		String payload ="{\r\n"
 				+ "    \"workspace\": {\r\n"
 				+ "        \"name\": \"My First TeChnage1\",\r\n"
@@ -75,7 +75,7 @@ public class B_Automate_PUT_req {
 	//here we are using via path param
 	void validate_patch_bdd_style_2()
 	{
-		String workspaceId ="801653a4-0731-4832-af4d-6095ab25e8bd";
+		String workspaceId ="018e21c0-093a-4ff0-9406-c098dc72a40a";
 		String payload ="{\r\n"
 				+ "    \"workspace\": {\r\n"
 				+ "        \"name\": \"My First TeChnage2\",\r\n"
