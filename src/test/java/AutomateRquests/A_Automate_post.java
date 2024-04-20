@@ -25,93 +25,96 @@ public class A_Automate_post {
 	static String apiKey_1 = "-65e5ed1b2cbf790001869f42-";
 	static String apiKey_2 = "dfea8a7457bed05a72d9d335de0797c27a";
 
-	//RequestSpecification requestSpecification;
+	// RequestSpecification requestSpecification;
 
-	
 	@BeforeClass
 	void beforeClass() {
 
-		RequestSpecBuilder builder1 = new RequestSpecBuilder().setBaseUri(BASE_URL).addHeader("X-Api-Key",
-				"PMAK" + apiKey_1 + apiKey_2).log(LogDetail.ALL);
+		RequestSpecBuilder builder1 = new RequestSpecBuilder().setBaseUri(BASE_URL)
+				.addHeader("X-Api-Key", "PMAK" + apiKey_1 + apiKey_2).log(LogDetail.ALL);
 
-		
-		 RequestSpecBuilder builder = new RequestSpecBuilder();
-		 builder.setBaseUri(BASE_URL); builder.addHeader("X-Api-Key", "PMAK" +
-		 apiKey_1 + apiKey_2);
-		 builder.log(LogDetail.ALL);
-		 RestAssured.requestSpecification = builder1.build();
-		
-		
-	
-			
+		RequestSpecBuilder builder = new RequestSpecBuilder();
+		builder.setBaseUri(BASE_URL);
+		builder.addHeader("X-Api-Key", "PMAK" + apiKey_1 + apiKey_2);
+		builder.log(LogDetail.ALL);
+		RestAssured.requestSpecification = builder1.build();
+
+		System.out.println("---------Log response-----------");
 		ResponseSpecBuilder responseSpecBuilder = new ResponseSpecBuilder();
 		responseSpecBuilder.expectStatusCode(RESP_200).expectContentType(ContentType.JSON).log(LogDetail.ALL);
-		
-		
-		//Needes to used RestAssured.responseSpecification
-		
-		RestAssured.responseSpecification =responseSpecBuilder.build();
+
+		// Needes to used RestAssured.responseSpecification
+
+		RestAssured.responseSpecification = responseSpecBuilder.build();
 		System.out.println("--------------------");
-				
+
 	}
-	
+
 	@Test
 	void post_req() {
-		String bodyCon ="{\r\n"
-				+ "    \"workspace\": {\r\n"
-				+ "        \"name\": \"My First worksspace\",\r\n"
-				+ "        \"type\": \"team\",\r\n"
-				+ "        \"visibility\": \"personal\"\r\n"
-				+ "    }\r\n"
-				+ "}";
-		
+		String bodyCon = "{\r\n" + "    \"workspace\": {\r\n" + "        \"name\": \"My First worksspace\",\r\n"
+				+ "        \"type\": \"team\",\r\n" + "        \"visibility\": \"personal\"\r\n" + "    }\r\n" + "}";
+
 		given().body(bodyCon)
-		
-		
-		.when().post(WORKSPACE)
-		
-		.then().log().all()
-		
-		.assertThat()
-		
-		.body("workspace.name", equalTo("My First worksspace1"),
-				
-				//https://regex101.com/ you need to work on regular expression
-				"workspace.id",matchesPattern("^[a-z0-9-]{36}$"))
-		;
-		
-	}
-/*
-	@Test
 
-	void validate_status_code_tdd() {
+				.when().post(WORKSPACE)
 
-		//this change as there is bug --> Cannot get property 'assertionClosure' on null object
-		//no need for response here as just done status code above
-		//Response response =
-				
-				given().spec(requestSpecification)
-			//here then method is not overloaded so used spec point to be noted
-				.get(WORKSPACE).then();
+				.then().log().all()
 
-		//no need to assert
-		//assertThat(response.statusCode(), is(equalTo(RESP_200)));
+				.assertThat()
+
+				.body("workspace.name", equalTo("My First worksspace1"),
+
+						// https://regex101.com/ you need to work on regular expression
+						"workspace.id", matchesPattern("^[a-z0-9-]{36}$"));
 
 	}
 
 	@Test
-	void validate_responce_body_TDD() {
-
-		Response response = given().spec(requestSpecification).get(WORKSPACE).then().extract().response();
-		
-		//No need for the statusCOde assert
-		//assertThat(response.statusCode(), is(equalTo(RESP_200)));
-
-		// for body needs to conver to string
-		assertThat(response.path("workspaces.name[1]").toString(), is(equalTo("My Workspace")));
-		// assertThat(response.path("workspaces.name").toString(), hasItems("Team
-		// Workspace", "My Workspace", "w1", "Test Post workspace"));
-
+	void validate_post_req_non_bdd_style() {
+		String bodyCon = "{\r\n" + "    \"workspace\": {\r\n" + "        \"name\": \"My First worksspace21\",\r\n"
+				+ "        \"type\": \"team\",\r\n" + "        \"visibility\": \"personal\"\r\n" + "    }\r\n" + "}";
+	Response response=	with().body(bodyCon).post(WORKSPACE);
+	
+	//here are asserssions make sure to use toString
+	assertThat(response.path("workspace.name").toString(), equalTo("My First worksspace21"));
+	
+	assertThat(response.path("workspace.id").toString(), matchesPattern("^[a-z0-9-]{36}$"));
+	
 	}
-*/
+
+	/*
+	 * @Test
+	 * 
+	 * void validate_status_code_tdd() {
+	 * 
+	 * //this change as there is bug --> Cannot get property 'assertionClosure' on
+	 * null object //no need for response here as just done status code above
+	 * //Response response =
+	 * 
+	 * given().spec(requestSpecification) //here then method is not overloaded so
+	 * used spec point to be noted .get(WORKSPACE).then();
+	 * 
+	 * //no need to assert //assertThat(response.statusCode(),
+	 * is(equalTo(RESP_200)));
+	 * 
+	 * }
+	 * 
+	 * @Test void validate_responce_body_TDD() {
+	 * 
+	 * Response response =
+	 * given().spec(requestSpecification).get(WORKSPACE).then().extract().response()
+	 * ;
+	 * 
+	 * //No need for the statusCOde assert //assertThat(response.statusCode(),
+	 * is(equalTo(RESP_200)));
+	 * 
+	 * // for body needs to conver to string
+	 * assertThat(response.path("workspaces.name[1]").toString(),
+	 * is(equalTo("My Workspace"))); //
+	 * assertThat(response.path("workspaces.name").toString(), hasItems("Team //
+	 * Workspace", "My Workspace", "w1", "Test Post workspace"));
+	 * 
+	 * }
+	 */
 }
