@@ -16,10 +16,9 @@ import io.restassured.filter.log.LogDetail;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import io.restassured.specification.ResponseSpecification;
 import jdk.internal.net.http.common.Log;
 
-public class ResponseSepcificationBuilder_2 {
+public class ResponseSepcificationBuilder_Default {
 	public static String BASE_URL = "https://api.postman.com";
 	public static String WORKSPACE = "/workspaces";
 	static int RESP_200 = 200;
@@ -27,7 +26,6 @@ public class ResponseSepcificationBuilder_2 {
 	static String apiKey_2 = "dfea8a7457bed05a72d9d335de0797c27a";
 
 	RequestSpecification requestSpecification;
-	ResponseSpecification responseSpecification;
 
 	
 	@BeforeClass
@@ -43,15 +41,16 @@ public class ResponseSepcificationBuilder_2 {
 		 builder.log(LogDetail.ALL);
 		requestSpecification = builder1.build();
 		
-		//here we are checking for response like status code header etc
-		System.out.println("Resp log");
-		/*
-		 * RestAssured.responseSpecification = RestAssured.expect().
-		 * statusCode(RESP_200).log().all();//.contentType(null);
-		 */		
+		
+	
+			
 		ResponseSpecBuilder responseSpecBuilder = new ResponseSpecBuilder();
-		responseSpecBuilder.expectStatusCode(RESP_200).expectContentType(ContentType.JSON).log(LogDetail.ALL);
-		responseSpecification =responseSpecBuilder.build();
+		responseSpecBuilder.expectStatusCode(RESP_200).expectContentType(ContentType.XML).log(LogDetail.ALL);
+		
+		
+		//Needes to used RestAssured.responseSpecification
+		
+		RestAssured.responseSpecification =responseSpecBuilder.build();
 		System.out.println("--------------------");
 				
 	}
@@ -66,7 +65,7 @@ public class ResponseSepcificationBuilder_2 {
 				
 				given().spec(requestSpecification)
 			//here then method is not overloaded so used spec point to be noted
-				.get(WORKSPACE).then().spec(responseSpecification);
+				.get(WORKSPACE).then();
 
 		//no need to assert
 		//assertThat(response.statusCode(), is(equalTo(RESP_200)));
@@ -76,7 +75,7 @@ public class ResponseSepcificationBuilder_2 {
 	@Test
 	void validate_responce_body_TDD() {
 
-		Response response = given().spec(requestSpecification).get(WORKSPACE).then().spec(responseSpecification).extract().response();
+		Response response = given().spec(requestSpecification).get(WORKSPACE).then().extract().response();
 		
 		//No need for the statusCOde assert
 		//assertThat(response.statusCode(), is(equalTo(RESP_200)));
