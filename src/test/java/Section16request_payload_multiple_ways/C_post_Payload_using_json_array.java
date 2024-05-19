@@ -22,7 +22,6 @@ import io.restassured.filter.log.LogDetail;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import jdk.internal.net.http.common.Log;
 
 public class C_post_Payload_using_json_array {
 	public static String BASE_URL = "https://8bcde19e-bb18-4b95-a5bc-57a2b05ae0ab.mock.pstmn.io/";

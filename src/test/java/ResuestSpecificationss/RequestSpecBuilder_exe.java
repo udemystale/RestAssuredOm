@@ -13,7 +13,6 @@ import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import jdk.internal.net.http.common.Log;
 
 public class RequestSpecBuilder_exe {
 	public static String BASE_URL = "https://api.postman.com";

@@ -16,7 +16,6 @@ import io.restassured.response.Response;
 import io.restassured.specification.QueryableRequestSpecification;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.SpecificationQuerier;
-import jdk.internal.net.http.common.Log;
 
 public class Default_Resq_spec {
 	public static String BASE_URL = "https://api.postman.com";

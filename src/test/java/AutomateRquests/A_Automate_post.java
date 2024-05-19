@@ -16,7 +16,6 @@ import io.restassured.filter.log.LogDetail;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import jdk.internal.net.http.common.Log;
 
 public class A_Automate_post {
 	public static String BASE_URL = "https://api.postman.com";
@@ -63,7 +62,7 @@ public class A_Automate_post {
 
 				.assertThat()
 
-				.body("workspace.name", equalTo("My First worksspace1"),
+				.body("workspace.name", equalTo("My First worksspace"),
 
 						// https://regex101.com/ you need to work on regular expression
 						"workspace.id", matchesPattern("^[a-z0-9-]{36}$"));
