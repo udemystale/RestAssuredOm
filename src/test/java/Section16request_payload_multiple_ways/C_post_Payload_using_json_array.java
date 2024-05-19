@@ -49,6 +49,7 @@ public class C_post_Payload_using_json_array {
 		
 				//OR
 		//set contentype as below in both the rest api code and example as well
+		 
 		
 		builder.setContentType("application/json;charset=UTF-8");
 		builder.addHeader("X-Api-Key", "PMAK" + apiKey_1 + apiKey_2);
