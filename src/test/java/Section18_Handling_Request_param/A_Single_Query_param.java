@@ -32,4 +32,11 @@ public class A_Single_Query_param {
 		.log().all().get("get").then().log()
 				.all().assertThat().statusCode(200);
 	}
+	@Test
+	void multiValue_query_Param() {
+		given().baseUri("https://postman-echo.com/").
+		
+		queryParam("foo1", "book1,book3,book4 booke ; bokkSemi").log().all().get("get").then().log()
+				.all().assertThat().statusCode(200);
+	}
 }
